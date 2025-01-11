@@ -1,0 +1,26 @@
+<div class="card mb-3" *ngIf="fileData">
+  <div class="card-body">
+    <h5 class="card-title">{{ fileData.name }}</h5>
+    <p class="card-text">
+      <strong>Type:</strong> {{ fileData.type }} <br />
+      <strong>Size:</strong> {{ fileData.size | number }} bytes <br />
+      <strong>Created At:</strong> {{ fileData.createdAt | date : "short" }}
+      <br />
+      <strong>Updated At:</strong> {{ fileData.updatedAt | date : "short" }}
+    </p>
+    <button class="btn btn-primary" (click)="downloadFile()">
+      <i class="fa-solid fa-download"></i>
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="linkFile()"
+      *ngIf="!this.fileData.isInGroup"
+    >
+      <i class="fa-solid fa-share"></i>
+    </button>
+    <button type="button" class="btn btn-danger" (click)="deleteFile()">
+      <i class="fa-solid fa-x"></i>
+    </button>
+  </div>
+</div>

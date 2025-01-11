@@ -1,9 +1,10 @@
 import { Routes } from "@angular/router";
-import { LoginComponent } from "./login/login.component";
-import { FilePageComponent } from "./file-page/file-page.component";
-import { GroupPageComponent } from "./group-page/group-page.component";
 import { authGuard } from "./guards/auth.guard";
 import { noAuthGuard } from "./guards/no-auth.guard";
+import { FilePageComponent } from "./components/file-page/file-page.component";
+import { LoginComponent } from "./components/login/login.component";
+import { GroupPageComponent } from "./components/group-page/group-page.component";
+import { GroupFilesComponent } from "./components/group-files/group-files.component";
 
 export const routes: Routes = [
   {
@@ -20,6 +21,11 @@ export const routes: Routes = [
   {
     path: "groups",
     component: GroupPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: "groups/:id",
+    component: GroupFilesComponent,
     canActivate: [authGuard],
   },
   { path: "**", redirectTo: "/login" },

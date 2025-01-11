@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { AuthenticationService } from "../services/authentication.service";
-import { User } from "../classes/user";
 import { catchError, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { AuthenticationService } from "../../services/authentication.service";
+import { User } from "../../classes/user";
 
 @Component({
   selector: "app-login",

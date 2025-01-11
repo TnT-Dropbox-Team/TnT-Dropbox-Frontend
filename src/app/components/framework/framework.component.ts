@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { User } from "../classes/user";
-import { AuthenticationService } from "../services/authentication.service";
 import { CommonModule } from "@angular/common";
+import { AuthenticationService } from "../../services/authentication.service";
+import { User } from "../../classes/user";
 
 @Component({
   selector: "app-framework",
