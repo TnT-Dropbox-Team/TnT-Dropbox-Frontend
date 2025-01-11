@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <h3 class="text-center mb-4">Login</h3>
+          <form (ngSubmit)="onLoginSubmit()">
+            <div *ngIf="formError" class="form-group">
+              <div class="alert alert-dark p-2 mt-4" role="alert">
+                <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Username</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Enter your username"
+                [(ngModel)]="credentials.username"
+                required
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                [(ngModel)]="credentials.password"
+                required
+              />
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+              <button type="submit" class="btn btn-primary btn-block mt-3">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

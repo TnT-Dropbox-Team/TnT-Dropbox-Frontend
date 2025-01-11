@@ -1,0 +1,62 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <b>TnTDropbox</b>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/files" style="cursor: pointer">
+            Files
+          </a>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/groups" style="cursor: pointer">
+            Groups
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            routerLink="/"
+            style="cursor: pointer"
+            *ngIf="!isLoggedIn()"
+          >
+            Login
+          </a>
+          <a
+            class="nav-link"
+            style="cursor: pointer"
+            *ngIf="isLoggedIn()"
+            (click)="logout()"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container-fluid pt-4 pb-4">
+    <router-outlet></router-outlet>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+      <p>&copy; 2025 TnTDropbox. All Rights Reserved.</p>
+    </footer>
+  </div>
+</main>
