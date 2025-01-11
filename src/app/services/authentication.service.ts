@@ -60,10 +60,10 @@ export class AuthenticationService {
     if (this.isLoggedIn()) {
       let token: string | null = this.getToken();
       if (token) {
-        let { userId, firstName, lastName, username } = JSON.parse(
+        let { userId, firstName, lastName, sub } = JSON.parse(
           this.b64Utf8(token.split(".")[1])
         );
-        user = { userId, firstName, lastName, username };
+        user = { id: userId, firstName, lastName, username: sub };
       }
     }
     return user;

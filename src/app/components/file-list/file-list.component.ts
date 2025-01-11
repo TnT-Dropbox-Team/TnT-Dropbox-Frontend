@@ -2,11 +2,14 @@ import { Component, Input } from "@angular/core";
 import { FileData } from "../../classes/file-data";
 import { FileService } from "../../services/file.service";
 import { AuthenticationService } from "../../services/authentication.service";
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { catchError, throwError } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { FileCardComponent } from "../file-card/file-card.component";
 import { FormsModule } from "@angular/forms";
+import { Modal } from "bootstrap";
+import { Group } from "../../classes/group";
+import { GroupService } from "../../services/group.service";
 
 @Component({
   selector: "app-file-list",
@@ -27,9 +30,17 @@ export class FileListComponent {
   totalPages: number = 0;
   pageSize: number = 10;
 
+  selectedFile: any = null;
+
+  groups: Group[] = [];
+  errorForGroups: string = "";
+
+  successMessage: string | null = null;
+
   constructor(
     private fileService: FileService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private groupService: GroupService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +48,8 @@ export class FileListComponent {
   }
 
   fetchFiles(): void {
+    this.error = "";
+    this.downloadError = "";
     if (this.groupId) {
       this.fileService
         .getGroupFiles(
@@ -60,9 +73,7 @@ export class FileListComponent {
           this.loading = false;
         });
     } else {
-      this.error = "";
-      this.downloadError = "";
-      const userId = this.authenticationService.getCurrentUser()?.userId ?? 0;
+      const userId = this.authenticationService.getCurrentUser()?.id ?? 0;
       this.fileService
         .getUserFiles(
           userId,
@@ -111,5 +122,110 @@ export class FileListComponent {
 
   handleDownloadError(message: string): void {
     this.downloadError = message;
+  }
+
+  handleShare(file: any) {
+    this.selectedFile = file;
+
+    this.getAllGroups();
+
+    const modalElement = document.getElementById("shareModal") as HTMLElement;
+    if (modalElement) {
+      const bootstrapModal = new Modal(modalElement);
+      bootstrapModal.show();
+    }
+  }
+
+  confirmShare() {
+    this.selectedFile = null;
+  }
+
+  getAllGroups(): void {
+    this.errorForGroups = "";
+    this.groupService
+      .getAllGroups()
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.errorForGroups = error.toString();
+          return throwError(() => error);
+        })
+      )
+      .subscribe((data) => {
+        if (data.length == 0)
+          this.errorForGroups = "You are not part of any groups!";
+        this.groups = data;
+      });
+  }
+
+  shareWithGroup(group: Group) {
+    this.error = "";
+
+    if (!this.selectedFile) return;
+
+    this.fileService
+      .linkFileToGroup(this.selectedFile.id, group.id)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.error = error.toString();
+          return throwError(() => error);
+        })
+      )
+      .subscribe(() => {
+        this.successMessage = `File "${this.selectedFile?.name}" was successfully shared with group "${group.name}".`;
+        const modalElement = document.getElementById(
+          "shareModal"
+        ) as HTMLElement;
+        if (modalElement) {
+          const bootstrapModal = Modal.getInstance(modalElement);
+          bootstrapModal?.hide();
+        }
+        this.selectedFile = null;
+        this.fetchFiles();
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 3000);
+      });
+  }
+
+  handleShareDelete(file: any) {
+    this.selectedFile = file;
+
+    const modalElement = document.getElementById(
+      "deleteConfirmationModal"
+    ) as HTMLElement;
+    if (modalElement) {
+      const bootstrapModal = new Modal(modalElement);
+      bootstrapModal.show();
+    }
+  }
+
+  deleteFile() {
+    this.error = "";
+
+    if (!this.selectedFile) return;
+
+    this.fileService
+      .deleteFile(this.selectedFile.id)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.error = error.toString();
+          return throwError(() => error);
+        })
+      )
+      .subscribe(() => {
+        this.successMessage = `File "${this.selectedFile?.name}" was successfully deleted.`;
+        const modalElement = document.getElementById(
+          "deleteConfirmationModal"
+        ) as HTMLElement;
+        if (modalElement) {
+          const bootstrapModal = Modal.getInstance(modalElement);
+          bootstrapModal?.hide();
+        }
+        this.selectedFile = null;
+        this.fetchFiles();
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 3000);
+      });
   }
 }

@@ -5,6 +5,7 @@ import { GroupService } from "../../services/group.service";
 import { Router } from "@angular/router";
 import { catchError, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
+import { AuthenticationService } from "../../services/authentication.service";
 
 @Component({
   selector: "app-group-page",
@@ -26,7 +27,11 @@ export class GroupPageComponent implements OnInit {
   loading: boolean = true;
   error: string = "";
 
-  constructor(private groupService: GroupService, private router: Router) {}
+  constructor(
+    private groupService: GroupService,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.fetchGroups();
@@ -54,5 +59,10 @@ export class GroupPageComponent implements OnInit {
 
   goToGroup(groupId: number): void {
     this.router.navigate([`/groups/${groupId}`]);
+  }
+
+  isAdmin(group: Group) {
+    const user = this.authenticationService.getCurrentUser();
+    return user && group.admin.id === user.id;
   }
 }

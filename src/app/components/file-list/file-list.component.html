@@ -20,6 +20,10 @@
   {{ error }}
 </div>
 
+<div *ngIf="successMessage" class="alert alert-success" role="alert">
+  {{ successMessage }}
+</div>
+
 <div *ngIf="downloadError" class="alert alert-danger" role="alert">
   {{ downloadError }}
 </div>
@@ -35,6 +39,8 @@
     <app-file-card
       [fileData]="file"
       (errorOccurred)="handleDownloadError($event)"
+      (onShare)="handleShare($event)"
+      (onDelete)="handleShareDelete($event)"
     ></app-file-card>
   </div>
 </div>
@@ -54,4 +60,97 @@
       </li>
     </ul>
   </nav>
+</div>
+
+<div
+  class="modal fade"
+  id="shareModal"
+  tabindex="-1"
+  aria-labelledby="shareModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share File</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="confirmShare()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="errorForGroups" class="alert alert-danger" role="alert">
+          {{ errorForGroups }}
+        </div>
+        <ul class="list-group">
+          <li
+            *ngFor="let group of groups"
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {{ group.name }}
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="shareWithGroup(group)"
+            >
+              Share
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="confirmShare()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deleteConfirmationModal"
+  tabindex="-1"
+  aria-labelledby="deleteConfirmationModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmationModalLabel">
+          Confirm Delete
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="confirmShare()"
+        ></button>
+      </div>
+      <div class="modal-body">Are you sure you want to delete this item?</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="confirmShare()"
+        >
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteFile()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

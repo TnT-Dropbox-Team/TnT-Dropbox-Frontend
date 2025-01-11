@@ -14,12 +14,16 @@
     <button
       type="button"
       class="btn btn-secondary"
-      (click)="linkFile()"
-      *ngIf="!this.fileData.isInGroup"
+      (click)="onShare.emit(fileData)"
+      *ngIf="!this.fileData.inGroup"
     >
       <i class="fa-solid fa-share"></i>
     </button>
-    <button type="button" class="btn btn-danger" (click)="deleteFile()">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="onDelete.emit(fileData)"
+    >
       <i class="fa-solid fa-x"></i>
     </button>
   </div>

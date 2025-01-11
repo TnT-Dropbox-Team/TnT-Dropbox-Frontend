@@ -18,6 +18,8 @@ export class FileCardComponent {
 
   @Input() fileData: FileData | undefined;
   @Output() errorOccurred = new EventEmitter<string>();
+  @Output() onShare = new EventEmitter<any>();
+  @Output() onDelete = new EventEmitter<any>();
 
   downloadFile() {
     if (!this.fileData) {
@@ -40,8 +42,4 @@ export class FileCardComponent {
         saveAs(blob, this.fileData?.name || "downloaded-file");
       });
   }
-
-  deleteFile() {}
-
-  linkFile() {}
 }

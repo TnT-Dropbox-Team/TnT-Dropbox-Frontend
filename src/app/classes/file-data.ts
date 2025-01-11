@@ -5,5 +5,5 @@ export interface FileData {
   type: string;
   createdAt: string;
   updatedAt: string;
-  isInGroup: boolean;
+  inGroup: boolean;
 }
