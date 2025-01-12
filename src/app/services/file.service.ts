@@ -90,12 +90,15 @@ export class FileService {
     });
   }
 
-  uploadNewFile(fileData: FormData): Observable<FileData> {
+  uploadNewFile(file: File): Observable<FileData> {
+    const formData = new FormData();
+    formData.append("file", file);
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authenticationService.getToken()}`,
     });
 
-    return this.http.post<FileData>(`${this.apiUrl}`, fileData, { headers });
+    return this.http.post<FileData>(`${this.apiUrl}`, formData, { headers });
   }
 
   linkFileToGroup(fileId: number, groupId: number): Observable<FileData> {

@@ -1,4 +1,81 @@
 <div class="container mt-4">
   <h2>Files</h2>
-  <app-file-list></app-file-list>
+  <app-file-list [triggerAction]="triggerAction"></app-file-list>
+</div>
+
+<button
+  type="button"
+  class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4"
+  (click)="openModal()"
+>
+  <i class="fa-solid fa-plus"></i>
+</button>
+
+<div
+  class="modal fade"
+  id="fileUploadModal"
+  tabindex="-1"
+  aria-labelledby="fileUploadModalLabel"
+  aria-hidden="true"
+  #modalElement
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileUploadModalLabel">Upload File</h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" #fileForm="ngForm">
+          <div class="mb-3">
+            <label for="fileDrop" class="form-label">Upload File</label>
+            <div
+              id="fileDrop"
+              class="border border-secondary rounded p-3 text-center"
+              (click)="triggerFileInput()"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onFileDrop($event)"
+              [class.bg-light]="isDragging"
+            >
+              <ng-container *ngIf="fileName; else placeholder">
+                <span>{{ fileName }}</span>
+              </ng-container>
+              <ng-template #placeholder>
+                <span>Drop file here or click to upload</span>
+              </ng-template>
+            </div>
+            <input
+              type="file"
+              #fileInput
+              hidden
+              (change)="onFileChange($event)"
+            />
+          </div>
+          <div *ngIf="uploadError" class="alert alert-danger">
+            {{ uploadError }}
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Close
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!selectedFile"
+          (click)="onSubmit()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

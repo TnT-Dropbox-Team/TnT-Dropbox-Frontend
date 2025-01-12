@@ -46,7 +46,7 @@ export class GroupPageComponent implements OnInit {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           this.loading = false;
-          this.error = error.toString();
+          this.error = error.error.message.toString();
           return throwError(() => error);
         })
       )

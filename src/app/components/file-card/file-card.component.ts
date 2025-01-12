@@ -30,7 +30,7 @@ export class FileCardComponent {
       .getFile(this.fileData!.id)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          const errorMessage = `Failed to download file: ${error.message}`;
+          const errorMessage = `Failed to download file: ${error.error.message.toString()}`;
           this.errorOccurred.emit(errorMessage);
           return throwError(() => error);
         })

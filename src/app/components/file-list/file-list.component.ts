@@ -1,4 +1,11 @@
-import { Component, Input } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
 import { FileData } from "../../classes/file-data";
 import { FileService } from "../../services/file.service";
 import { AuthenticationService } from "../../services/authentication.service";
@@ -18,7 +25,7 @@ import { GroupService } from "../../services/group.service";
   templateUrl: "file-list.component.html",
   styles: ``,
 })
-export class FileListComponent {
+export class FileListComponent implements OnChanges, OnInit {
   @Input() groupId?: number;
   files: FileData[] = [];
   loading: boolean = true;
@@ -37,6 +44,8 @@ export class FileListComponent {
 
   successMessage: string | null = null;
 
+  @Input() triggerAction: boolean = false;
+
   constructor(
     private fileService: FileService,
     private authenticationService: AuthenticationService,
@@ -45,6 +54,12 @@ export class FileListComponent {
 
   ngOnInit(): void {
     this.fetchFiles();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["triggerAction"]) {
+      this.fetchFiles();
+    }
   }
 
   fetchFiles(): void {
@@ -62,7 +77,7 @@ export class FileListComponent {
         .pipe(
           catchError((error: HttpErrorResponse) => {
             this.loading = false;
-            this.error = error.toString();
+            this.error = error.error.message.toString();
             return throwError(() => error);
           })
         )
@@ -85,7 +100,7 @@ export class FileListComponent {
         .pipe(
           catchError((error: HttpErrorResponse) => {
             this.loading = false;
-            this.error = error.toString();
+            this.error = error.error.message.toString();
             return throwError(() => error);
           })
         )
@@ -146,7 +161,7 @@ export class FileListComponent {
       .getAllGroups()
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorForGroups = error.toString();
+          this.errorForGroups = error.error.message.toString();
           return throwError(() => error);
         })
       )
@@ -166,7 +181,7 @@ export class FileListComponent {
       .linkFileToGroup(this.selectedFile.id, group.id)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.error = error.toString();
+          this.error = error.error.message.toString();
           return throwError(() => error);
         })
       )
@@ -208,7 +223,7 @@ export class FileListComponent {
       .deleteFile(this.selectedFile.id)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.error = error.toString();
+          this.error = error.error.message.toString();
           return throwError(() => error);
         })
       )
