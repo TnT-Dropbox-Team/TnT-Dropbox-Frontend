@@ -9,7 +9,17 @@ import { User } from "../../classes/user";
   standalone: true,
   imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: "framework.component.html",
-  styles: ``,
+  styles: `
+    footer {
+      position: relative;
+      margin-top: auto;
+    }
+    #app-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+`,
 })
 export class FrameworkComponent {
   constructor(private readonly authenticationService: AuthenticationService) {}

@@ -1,4 +1,154 @@
-<div class="container mt-4">
+<div *ngIf="error" class="container alert alert-danger mt-4">
+  Error: {{ error }}
+</div>
+<div class="container mt-4" *ngIf="group">
+  <h2>{{ group.name }}</h2>
+  <div>
+    <span class="me-3">Created At: {{ group.createdAt | date : "short" }}</span>
+    <span *ngIf="isAdmin(group)">You are the admin</span>
+    <span *ngIf="!isAdmin(group)"
+      >Admin: {{ group.admin.firstName }} {{ group.admin.lastName }}</span
+    >
+    <button
+      class="btn btn-danger ms-3"
+      *ngIf="isAdmin(group)"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteGroupModal"
+    >
+      delete this group
+      <i class="fa-solid fa-trash ms-1"></i>
+    </button>
+  </div>
+  <hr />
+  <h3>Members ({{ group.members }}):</h3>
+  <div *ngFor="let member of members" class="mt-2">
+    <span
+      >{{ member.firstName }} {{ member.lastName }} ({{ member.username }})
+    </span>
+    <button
+      class="btn btn-danger ms-2 pt-1 pb-1"
+      *ngIf="isAdmin(group) && member.id !== currentUser?.id"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteModal"
+      (click)="setMemberToRemove(member.id)"
+    >
+      remove
+      <i class="fa-solid fa-x"></i>
+    </button>
+    <div class="badge bg-success ms-2" *ngIf="member.id === currentUser?.id">
+      You
+    </div>
+  </div>
+  <hr />
+  <div *ngIf="isAdmin(group)">
+    <h3>Add Members</h3>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search username"
+      [(ngModel)]="searchQuery"
+      (ngModelChange)="getUsersList(searchQuery)"
+    />
+    <div *ngIf="users?.length === 0" class="alert alert-warning mt-3">
+      No users found
+    </div>
+    <div *ngFor="let user of users" class="mt-2">
+      <span>
+        {{ user.firstName }} {{ user.lastName }} ({{ user.username }})
+      </span>
+      <button
+        *ngIf="!isMember(user.id)"
+        class="btn btn-primary ms-2 pt-1 pb-1"
+        (click)="addMember(user.id)"
+      >
+        add
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <div
+        class="badge bg-success ms-2"
+        *ngIf="isMember(user.id)"
+      >
+        Member
+      </div>
+    </div>
+    <hr />
+  </div>
   <h2>Group Files</h2>
   <app-file-list [groupId]="selectedGroupId"></app-file-list>
+</div>
+
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm delete</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this user from the group?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          (click)="removeMember()"
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deleteGroupModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm delete</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this group?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          (click)="deleteGroup()"
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

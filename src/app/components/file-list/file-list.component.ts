@@ -35,7 +35,7 @@ export class FileListComponent implements OnChanges, OnInit {
   sortOrder: string = "desc";
   currentPage: number = 0;
   totalPages: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 6;
 
   selectedFile: any = null;
 

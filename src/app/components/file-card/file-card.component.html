@@ -8,12 +8,12 @@
       <br />
       <strong>Updated At:</strong> {{ fileData.updatedAt | date : "short" }}
     </p>
-    <button class="btn btn-primary" (click)="downloadFile()">
+    <button class="btn btn-primary me-2" (click)="downloadFile()">
       <i class="fa-solid fa-download"></i>
     </button>
     <button
       type="button"
-      class="btn btn-secondary"
+      class="btn btn-secondary me-2"
       (click)="onShare.emit(fileData)"
       *ngIf="!this.fileData.inGroup"
     >

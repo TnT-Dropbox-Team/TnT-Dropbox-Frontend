@@ -6,11 +6,12 @@ import { Router } from "@angular/router";
 import { catchError, throwError } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AuthenticationService } from "../../services/authentication.service";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-group-page",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: "group-page.component.html",
   styles: `
       .group-card {
@@ -26,6 +27,8 @@ export class GroupPageComponent implements OnInit {
   groups: Group[] = [];
   loading: boolean = true;
   error: string = "";
+  inputName: string = "";
+  createError: string = "";
 
   constructor(
     private groupService: GroupService,
@@ -64,5 +67,33 @@ export class GroupPageComponent implements OnInit {
   isAdmin(group: Group) {
     const user = this.authenticationService.getCurrentUser();
     return user && group.admin.id === user.id;
+  }
+
+  createGroup(inputName: string): void {
+    if (!inputName) {
+      this.createError = "Name cannot be empty!";
+      return;
+    }
+    if (inputName.length < 3) {
+      this.createError = "Name is too short!";
+      return;
+    }
+    if (inputName.length > 100) {
+      this.createError = "Name is too long!";
+      return;
+    }
+    this.createError = "";
+    this.groupService
+      .addGroup(inputName)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.createError = error.error.message.toString();
+          return throwError(() => error);
+        })
+      )
+      .subscribe((group) => {
+        this.groups.push(group);
+        this.inputName = "";
+      });
   }
 }

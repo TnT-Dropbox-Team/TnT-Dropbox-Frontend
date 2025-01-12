@@ -7,13 +7,20 @@ import { Injectable } from "@angular/core";
 import { catchError, Observable, retry, throwError } from "rxjs";
 import { AuthResponse } from "../classes/auth-response";
 import { User } from "../classes/user";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class UsersDataService {
-  constructor(private http: HttpClient) {}
-  private apiUrl = "http://localhost:3000/users";
+  constructor(
+    private http: HttpClient,
+  ) {}
+
+  // test version:
+  //private apiUrl = "http://localhost:3000/users";
+
+  private apiUrl = environment.userServiceURL;
 
   public login(user: User): Observable<AuthResponse> {
     return this.makeAuthApiCall("login", user);

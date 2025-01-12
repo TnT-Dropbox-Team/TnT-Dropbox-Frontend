@@ -4,12 +4,16 @@ import { Observable } from "rxjs";
 import { FileData } from "../classes/file-data";
 import { AuthenticationService } from "./authentication.service";
 import { FileDataOnly } from "../classes/file-data-only";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class FileService {
-  private apiUrl = `http://localhost:3000/files`;
+  // Test version:
+  //private apiUrl = `http://localhost:3000/files`;
+
+  private apiUrl = environment.fileServiceURL;
 
   constructor(
     private http: HttpClient,

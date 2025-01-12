@@ -20,10 +20,13 @@
       <div class="card group-card shadow-sm mb-4">
         <div class="card-body">
           <h5 class="card-title">{{ group.name }}</h5>
-          <p class="card-text">Created At: {{ group.createdAt }}</p>
           <p class="card-text">
+            Created At: {{ group.createdAt | date : "short" }}
+          </p>
+          <p class="card-text" *ngIf="!isAdmin(group)">
             Admin: {{ group.admin.firstName }} {{ group.admin.lastName }}
           </p>
+          <p class="card-text" *ngIf="isAdmin(group)">You are the admin</p>
           <p class="card-text">Members: {{ group.members }}</p>
           <div *ngIf="isAdmin(group)" class="position-absolute top-0 end-0 p-2">
             <i class="fa-solid fa-star" style="font-size: 1.5em"></i>
@@ -31,5 +34,29 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="groups.length === 0" class="alert alert-warning mt-3">
+    No groups found
+  </div>
+
+  <div class="text-primary">Add new group:</div>
+  <form class="form-group d-flex" (submit)="createGroup(inputName)">
+    <input
+      [(ngModel)]="inputName"
+      name="name"
+      type="text"
+      class="form-control"
+      placeholder="Group name"
+    />
+    <button
+      type="submit"
+      class="btn btn-primary ms-2"
+    >
+      Create
+    </button>
+  </form>
+  <div *ngIf="createError" class="alert alert-danger mt-3">
+    {{ createError }}
   </div>
 </div>
