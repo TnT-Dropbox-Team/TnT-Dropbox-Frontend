@@ -19,7 +19,16 @@ import { HttpErrorResponse } from "@angular/common/http";
   standalone: true,
   imports: [CommonModule, FileListComponent, FormsModule],
   templateUrl: "file-page.component.html",
-  styles: ``,
+  styles: `
+    .add-button {
+      position: fixed;
+      bottom: 110px;
+      right: 20px;
+      z-index: 3;
+      width: 50px;
+      height: 50px;
+    }
+  `,
 })
 export class FilePageComponent implements AfterViewInit {
   @ViewChild("fileInput") fileInput!: ElementRef;
