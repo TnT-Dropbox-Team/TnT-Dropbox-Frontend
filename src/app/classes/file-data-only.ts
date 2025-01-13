@@ -1,3 +1,3 @@
 export interface FileDataOnly {
-  data: Uint8Array;
+  data: string;
 }

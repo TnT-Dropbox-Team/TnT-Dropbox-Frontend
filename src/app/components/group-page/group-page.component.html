@@ -36,10 +36,6 @@
     </div>
   </div>
 
-  <div *ngIf="groups.length === 0" class="alert alert-warning mt-3">
-    No groups found
-  </div>
-
   <div class="text-primary">Add new group:</div>
   <form class="form-group d-flex" (submit)="createGroup(inputName)">
     <input

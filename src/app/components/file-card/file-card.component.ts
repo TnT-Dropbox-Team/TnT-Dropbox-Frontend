@@ -36,10 +36,35 @@ export class FileCardComponent {
         })
       )
       .subscribe((data) => {
-        const blob = new Blob([data.data], {
+        // Convert base64 string to a byte array
+        const byteArray = this.convertBase64ToArrayBuffer(data.data);
+
+        // Create a Blob from the byte array
+        const blob = new Blob([byteArray], {
           type: "application/octet-stream",
         });
-        saveAs(blob, this.fileData?.name || "downloaded-file");
+
+        // Create a URL for the Blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create an anchor element and trigger the download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = this.fileData?.name || "downloadedFile.txt"; // Set the desired file name and extension
+        a.click();
+
+        // Release the Blob URL
+        window.URL.revokeObjectURL(url);
       });
+  }
+
+  private convertBase64ToArrayBuffer(base64: string): ArrayBuffer {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 }
