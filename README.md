@@ -1,7 +1,5 @@
 # TnTDropboxFrontend
 
-## Project Overview
-
 TnT Dropbox is designed for file storage, sharing, and management in a digital environment. Users can collaborate, track activities, and control access while ensuring availability anytime, anywhere. The application is based on microservices and includes features for file storage, management, notifications, activity tracking, and collaboration.
 
 This repository contains the **frontend** of the TnT Dropbox project.
