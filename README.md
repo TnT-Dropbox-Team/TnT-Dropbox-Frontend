@@ -1,27 +1,37 @@
 # TnTDropboxFrontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.12.
+## Project Overview
 
-## Development server
+TnT Dropbox is designed for file storage, sharing, and management in a digital environment. Users can collaborate, track activities, and control access while ensuring availability anytime, anywhere. The application is based on microservices and includes features for file storage, management, notifications, activity tracking, and collaboration.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This repository contains the **frontend** of the TnT Dropbox project.
 
-## Code scaffolding
+## Pages
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The frontend consists of the following main pages:
 
-## Build
+- **Login Page (`/login`)**
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+  - Users can log in to access their files and groups.
+  - ![Screenshot](assets/login.png)
 
-## Running unit tests
+- **Files Page (`/files`)**
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  - Displays the user's stored files.
+  - Users can upload, download, and manage files.
+  - ![Screenshot](assets/files.png)
 
-## Running end-to-end tests
+- **Groups Page (`/groups`)**
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+  - Lists user groups for collaboration.
+  - Users can create and manage groups.
+  - ![Screenshot](assets/groups.png)
 
-## Further help
+- **Group Details Page (`/groups/:id`)**
+  - Shows details of a specific group.
+  - Users can view shared files and collaborate within the group.
+  - ![Screenshot](assets/group_details.png)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Disclaimer
+
+The frontend does **not** implement every feature of the backend.
